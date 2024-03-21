@@ -116,6 +116,64 @@ static inline uint16_t mavlink_msg_payload_status_pack(uint8_t system_id, uint8_
 }
 
 /**
+ * @brief Pack a payload_status message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param status MAVLink status structure
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param pos_x  x position 
+ * @param pos_y  y position 
+ * @param pos_z  z position 
+ * @param linear_velocity_x  Linear Velocity x
+ * @param linear_velocity_y  Linear Velocity y
+ * @param linear_velocity_z  Linear Velocity z 
+ * @param angular_velocity_x  Angular Velocity x
+ * @param angular_velocity_y  Angular Velocity y
+ * @param angular_velocity_z  Angular Velocity z 
+ * @param payload_additional_info  Additional informations if needed
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_payload_status_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
+                               uint32_t pos_x, uint32_t pos_y, uint32_t pos_z, uint32_t linear_velocity_x, uint32_t linear_velocity_y, uint32_t linear_velocity_z, uint32_t angular_velocity_x, uint32_t angular_velocity_y, uint32_t angular_velocity_z, const char *payload_additional_info)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_PAYLOAD_STATUS_LEN];
+    _mav_put_uint32_t(buf, 0, pos_x);
+    _mav_put_uint32_t(buf, 4, pos_y);
+    _mav_put_uint32_t(buf, 8, pos_z);
+    _mav_put_uint32_t(buf, 12, linear_velocity_x);
+    _mav_put_uint32_t(buf, 16, linear_velocity_y);
+    _mav_put_uint32_t(buf, 20, linear_velocity_z);
+    _mav_put_uint32_t(buf, 24, angular_velocity_x);
+    _mav_put_uint32_t(buf, 28, angular_velocity_y);
+    _mav_put_uint32_t(buf, 32, angular_velocity_z);
+    _mav_put_char_array(buf, 36, payload_additional_info, 16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_PAYLOAD_STATUS_LEN);
+#else
+    mavlink_payload_status_t packet;
+    packet.pos_x = pos_x;
+    packet.pos_y = pos_y;
+    packet.pos_z = pos_z;
+    packet.linear_velocity_x = linear_velocity_x;
+    packet.linear_velocity_y = linear_velocity_y;
+    packet.linear_velocity_z = linear_velocity_z;
+    packet.angular_velocity_x = angular_velocity_x;
+    packet.angular_velocity_y = angular_velocity_y;
+    packet.angular_velocity_z = angular_velocity_z;
+    mav_array_memcpy(packet.payload_additional_info, payload_additional_info, sizeof(char)*16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_PAYLOAD_STATUS_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_PAYLOAD_STATUS;
+#if MAVLINK_CRC_EXTRA
+    return mavlink_finalize_message_buffer(msg, system_id, component_id, _status, MAVLINK_MSG_ID_PAYLOAD_STATUS_MIN_LEN, MAVLINK_MSG_ID_PAYLOAD_STATUS_LEN, MAVLINK_MSG_ID_PAYLOAD_STATUS_CRC);
+#else
+    return mavlink_finalize_message_buffer(msg, system_id, component_id, _status, MAVLINK_MSG_ID_PAYLOAD_STATUS_MIN_LEN, MAVLINK_MSG_ID_PAYLOAD_STATUS_LEN);
+#endif
+}
+
+/**
  * @brief Pack a payload_status message on a channel
  * @param system_id ID of this system
  * @param component_id ID of this component (e.g. 200 for IMU)
@@ -194,6 +252,20 @@ static inline uint16_t mavlink_msg_payload_status_encode(uint8_t system_id, uint
 static inline uint16_t mavlink_msg_payload_status_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_payload_status_t* payload_status)
 {
     return mavlink_msg_payload_status_pack_chan(system_id, component_id, chan, msg, payload_status->pos_x, payload_status->pos_y, payload_status->pos_z, payload_status->linear_velocity_x, payload_status->linear_velocity_y, payload_status->linear_velocity_z, payload_status->angular_velocity_x, payload_status->angular_velocity_y, payload_status->angular_velocity_z, payload_status->payload_additional_info);
+}
+
+/**
+ * @brief Encode a payload_status struct with provided status structure
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param status MAVLink status structure
+ * @param msg The MAVLink message to compress the data into
+ * @param payload_status C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_payload_status_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_payload_status_t* payload_status)
+{
+    return mavlink_msg_payload_status_pack_status(system_id, component_id, _status, msg,  payload_status->pos_x, payload_status->pos_y, payload_status->pos_z, payload_status->linear_velocity_x, payload_status->linear_velocity_y, payload_status->linear_velocity_z, payload_status->angular_velocity_x, payload_status->angular_velocity_y, payload_status->angular_velocity_z, payload_status->payload_additional_info);
 }
 
 /**

@@ -6,25 +6,25 @@
 
 typedef struct __mavlink_custom_payload_control_t {
  int16_t command_value; /*<  Value of the command*/
- char command_target[16]; /*<  specify target to control*/
+ char command_target[32]; /*<  specify target to control*/
 } mavlink_custom_payload_control_t;
 
-#define MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN 18
-#define MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_MIN_LEN 18
-#define MAVLINK_MSG_ID_12003_LEN 18
-#define MAVLINK_MSG_ID_12003_MIN_LEN 18
+#define MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN 34
+#define MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_MIN_LEN 34
+#define MAVLINK_MSG_ID_12003_LEN 34
+#define MAVLINK_MSG_ID_12003_MIN_LEN 34
 
-#define MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_CRC 255
-#define MAVLINK_MSG_ID_12003_CRC 255
+#define MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_CRC 77
+#define MAVLINK_MSG_ID_12003_CRC 77
 
-#define MAVLINK_MSG_CUSTOM_PAYLOAD_CONTROL_FIELD_COMMAND_TARGET_LEN 16
+#define MAVLINK_MSG_CUSTOM_PAYLOAD_CONTROL_FIELD_COMMAND_TARGET_LEN 32
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_CUSTOM_PAYLOAD_CONTROL { \
     12003, \
     "CUSTOM_PAYLOAD_CONTROL", \
     2, \
-    {  { "command_target", NULL, MAVLINK_TYPE_CHAR, 16, 2, offsetof(mavlink_custom_payload_control_t, command_target) }, \
+    {  { "command_target", NULL, MAVLINK_TYPE_CHAR, 32, 2, offsetof(mavlink_custom_payload_control_t, command_target) }, \
          { "command_value", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_custom_payload_control_t, command_value) }, \
          } \
 }
@@ -32,7 +32,7 @@ typedef struct __mavlink_custom_payload_control_t {
 #define MAVLINK_MESSAGE_INFO_CUSTOM_PAYLOAD_CONTROL { \
     "CUSTOM_PAYLOAD_CONTROL", \
     2, \
-    {  { "command_target", NULL, MAVLINK_TYPE_CHAR, 16, 2, offsetof(mavlink_custom_payload_control_t, command_target) }, \
+    {  { "command_target", NULL, MAVLINK_TYPE_CHAR, 32, 2, offsetof(mavlink_custom_payload_control_t, command_target) }, \
          { "command_value", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_custom_payload_control_t, command_value) }, \
          } \
 }
@@ -54,17 +54,51 @@ static inline uint16_t mavlink_msg_custom_payload_control_pack(uint8_t system_id
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN];
     _mav_put_int16_t(buf, 0, command_value);
-    _mav_put_char_array(buf, 2, command_target, 16);
+    _mav_put_char_array(buf, 2, command_target, 32);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN);
 #else
     mavlink_custom_payload_control_t packet;
     packet.command_value = command_value;
-    mav_array_memcpy(packet.command_target, command_target, sizeof(char)*16);
+    mav_array_memcpy(packet.command_target, command_target, sizeof(char)*32);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN);
 #endif
 
     msg->msgid = MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL;
     return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_MIN_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_CRC);
+}
+
+/**
+ * @brief Pack a custom_payload_control message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param status MAVLink status structure
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param command_target  specify target to control
+ * @param command_value  Value of the command
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_custom_payload_control_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
+                               const char *command_target, int16_t command_value)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN];
+    _mav_put_int16_t(buf, 0, command_value);
+    _mav_put_char_array(buf, 2, command_target, 32);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN);
+#else
+    mavlink_custom_payload_control_t packet;
+    packet.command_value = command_value;
+    mav_array_memcpy(packet.command_target, command_target, sizeof(char)*32);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL;
+#if MAVLINK_CRC_EXTRA
+    return mavlink_finalize_message_buffer(msg, system_id, component_id, _status, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_MIN_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_CRC);
+#else
+    return mavlink_finalize_message_buffer(msg, system_id, component_id, _status, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_MIN_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN);
+#endif
 }
 
 /**
@@ -84,12 +118,12 @@ static inline uint16_t mavlink_msg_custom_payload_control_pack_chan(uint8_t syst
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN];
     _mav_put_int16_t(buf, 0, command_value);
-    _mav_put_char_array(buf, 2, command_target, 16);
+    _mav_put_char_array(buf, 2, command_target, 32);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN);
 #else
     mavlink_custom_payload_control_t packet;
     packet.command_value = command_value;
-    mav_array_memcpy(packet.command_target, command_target, sizeof(char)*16);
+    mav_array_memcpy(packet.command_target, command_target, sizeof(char)*32);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN);
 #endif
 
@@ -125,6 +159,20 @@ static inline uint16_t mavlink_msg_custom_payload_control_encode_chan(uint8_t sy
 }
 
 /**
+ * @brief Encode a custom_payload_control struct with provided status structure
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param status MAVLink status structure
+ * @param msg The MAVLink message to compress the data into
+ * @param custom_payload_control C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_custom_payload_control_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_custom_payload_control_t* custom_payload_control)
+{
+    return mavlink_msg_custom_payload_control_pack_status(system_id, component_id, _status, msg,  custom_payload_control->command_target, custom_payload_control->command_value);
+}
+
+/**
  * @brief Send a custom_payload_control message
  * @param chan MAVLink channel to send the message
  *
@@ -138,12 +186,12 @@ static inline void mavlink_msg_custom_payload_control_send(mavlink_channel_t cha
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN];
     _mav_put_int16_t(buf, 0, command_value);
-    _mav_put_char_array(buf, 2, command_target, 16);
+    _mav_put_char_array(buf, 2, command_target, 32);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL, buf, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_MIN_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_CRC);
 #else
     mavlink_custom_payload_control_t packet;
     packet.command_value = command_value;
-    mav_array_memcpy(packet.command_target, command_target, sizeof(char)*16);
+    mav_array_memcpy(packet.command_target, command_target, sizeof(char)*32);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL, (const char *)&packet, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_MIN_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_CRC);
 #endif
 }
@@ -175,12 +223,12 @@ static inline void mavlink_msg_custom_payload_control_send_buf(mavlink_message_t
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
     _mav_put_int16_t(buf, 0, command_value);
-    _mav_put_char_array(buf, 2, command_target, 16);
+    _mav_put_char_array(buf, 2, command_target, 32);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL, buf, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_MIN_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_CRC);
 #else
     mavlink_custom_payload_control_t *packet = (mavlink_custom_payload_control_t *)msgbuf;
     packet->command_value = command_value;
-    mav_array_memcpy(packet->command_target, command_target, sizeof(char)*16);
+    mav_array_memcpy(packet->command_target, command_target, sizeof(char)*32);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL, (const char *)packet, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_MIN_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_LEN, MAVLINK_MSG_ID_CUSTOM_PAYLOAD_CONTROL_CRC);
 #endif
 }
@@ -198,7 +246,7 @@ static inline void mavlink_msg_custom_payload_control_send_buf(mavlink_message_t
  */
 static inline uint16_t mavlink_msg_custom_payload_control_get_command_target(const mavlink_message_t* msg, char *command_target)
 {
-    return _MAV_RETURN_char_array(msg, command_target, 16,  2);
+    return _MAV_RETURN_char_array(msg, command_target, 32,  2);
 }
 
 /**

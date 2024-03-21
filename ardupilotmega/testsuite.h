@@ -176,13 +176,13 @@ static void mavlink_test_custom_payload_control(uint8_t system_id, uint8_t compo
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_custom_payload_control_t packet_in = {
-        17235,"CDEFGHIJKLMNOPQ"
+        17235,"CDEFGHIJKLMNOPQRSTUVWXYZABCDEFG"
     };
     mavlink_custom_payload_control_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.command_value = packet_in.command_value;
         
-        mav_array_memcpy(packet1.command_target, packet_in.command_target, sizeof(char)*16);
+        mav_array_memcpy(packet1.command_target, packet_in.command_target, sizeof(char)*32);
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
         if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
